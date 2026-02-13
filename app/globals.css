@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ============================================================
-   Casino Mariage - Global Styles (Vegas Kitsch Love Theme)
-   ============================================================ */
-
 :root {
   --midnight: #1a0f2e;
   --midnight-deep: #0f0820;
@@ -31,31 +27,14 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   overflow-x: hidden;
+  overscroll-behavior-y: contain;
 }
 
-/* Reel container styling */
-.reel-container {
-  background: linear-gradient(145deg, #0d1b30, #0a1225);
-}
-
-/* Scrollbar hidden */
 ::-webkit-scrollbar {
   display: none;
 }
 
-/* Selection color */
 ::selection {
   background-color: rgba(255, 215, 0, 0.3);
   color: #ffffff;
-}
-
-/* Prevent pull-to-refresh on mobile */
-body {
-  overscroll-behavior-y: contain;
-}
-
-/* Pulsing animation for decorative hearts */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
 }
