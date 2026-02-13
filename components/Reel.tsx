@@ -161,6 +161,5 @@ export default function Reel({ finalSymbol, spinning, stopDelay, reelIndex }: Re
         />
       )}
     </div>
-    </div >
   );
 }
