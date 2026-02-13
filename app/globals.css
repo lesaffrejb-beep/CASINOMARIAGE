@@ -7,10 +7,13 @@
    ============================================================ */
 
 :root {
-  --midnight: #0a1628;
-  --midnight-deep: #060e1a;
+  --midnight: #1a0f2e;
+  --midnight-deep: #0f0820;
   --gold: #FFD700;
+  --rose-gold: #E8B298;
   --neon-pink: #FF69B4;
+  --soft-pink: #FFB6C1;
+  --romantic-purple: #8B4789;
 }
 
 * {
