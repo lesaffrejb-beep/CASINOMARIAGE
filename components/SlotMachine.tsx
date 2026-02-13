@@ -20,10 +20,14 @@ export default function SlotMachine() {
 
   const confettiRef = useRef<JSConfetti | null>(null);
   const lastTapRef = useRef<number>(0);
-  const cooldownIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const cooldownRafRef = useRef<number>(0);
 
   useEffect(() => {
     confettiRef.current = new JSConfetti();
+    return () => {
+      confettiRef.current?.clearCanvas();
+      confettiRef.current = null;
+    };
   }, []);
 
   // God Mode: double-tap logo
@@ -39,6 +43,62 @@ export default function SlotMachine() {
 
   const REEL_STOP_DELAYS = [1000, 1500, 2000];
   const TOTAL_SPIN_TIME = 2300;
+
+  // 3-burst confetti with rAF for smooth timing
+  const fireConfetti = useCallback(() => {
+    if (!confettiRef.current) return;
+
+    confettiRef.current.addConfetti({
+      emojis: ["❤️", "💍", "🥂", "💒", "🍾"],
+      emojiSize: 50,
+      confettiNumber: 60,
+    });
+
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        confettiRef.current?.addConfetti({
+          confettiColors: ["#FFD700", "#FF69B4", "#FF1493", "#FFA500", "#FFFFFF"],
+          confettiNumber: 120,
+          confettiRadius: 5,
+        });
+      }, 350);
+    });
+
+    setTimeout(() => {
+      confettiRef.current?.addConfetti({
+        confettiColors: ["#FFD700", "#FFC700", "#FFE066"],
+        confettiNumber: 80,
+        confettiRadius: 4,
+      });
+    }, 900);
+  }, []);
+
+  // Smooth cooldown via requestAnimationFrame
+  const startCooldown = useCallback(() => {
+    setCooldown(true);
+    setCooldownLeft(COOLDOWN_MS);
+    const startTime = performance.now();
+
+    const tick = (now: number) => {
+      const elapsed = now - startTime;
+      const left = Math.max(0, COOLDOWN_MS - elapsed);
+      setCooldownLeft(left);
+      if (left <= 0) {
+        setCooldown(false);
+        setCooldownLeft(0);
+      } else {
+        cooldownRafRef.current = requestAnimationFrame(tick);
+      }
+    };
+
+    cooldownRafRef.current = requestAnimationFrame(tick);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (cooldownRafRef.current) cancelAnimationFrame(cooldownRafRef.current);
+    };
+  }, []);
 
   const handleSpin = useCallback(() => {
     if (spinning || cooldown) return;
@@ -57,36 +117,13 @@ export default function SlotMachine() {
       setSpinning(false);
       setShowResult(true);
 
-      if (spinResult.isWin && confettiRef.current) {
-        confettiRef.current.addConfetti({
-          emojis: ["❤️", "💍", "🥂", "💒", "🎰", "🍾"],
-          emojiSize: 60,
-          confettiNumber: 100,
-        });
-        setTimeout(() => {
-          confettiRef.current?.addConfetti({
-            confettiColors: ["#FFD700", "#FF69B4", "#FF1493", "#FFA500", "#FFFFFF"],
-            confettiNumber: 200,
-            confettiRadius: 6,
-          });
-        }, 500);
+      if (spinResult.isWin) {
+        fireConfetti();
       }
 
-      setCooldown(true);
-      setCooldownLeft(COOLDOWN_MS);
-      const startTime = Date.now();
-      cooldownIntervalRef.current = setInterval(() => {
-        const elapsed = Date.now() - startTime;
-        const left = Math.max(0, COOLDOWN_MS - elapsed);
-        setCooldownLeft(left);
-        if (left <= 0) {
-          setCooldown(false);
-          setCooldownLeft(0);
-          if (cooldownIntervalRef.current) clearInterval(cooldownIntervalRef.current);
-        }
-      }, 100);
+      startCooldown();
     }, TOTAL_SPIN_TIME);
-  }, [spinning, cooldown, forceNextWin]);
+  }, [spinning, cooldown, forceNextWin, fireConfetti, startCooldown]);
 
   const reels = result?.reels ?? [null, null, null];
 
@@ -103,7 +140,6 @@ export default function SlotMachine() {
         <div className="relative px-8 py-4">
           {/* Romantic glow */}
           <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-pink-500/20 via-rose-400/20 to-pink-500/20 blur-xl" />
-
           {/* Elegant border */}
           <div className="absolute -inset-1 border-2 border-pink-300/30 rounded-3xl" />
 
@@ -114,11 +150,7 @@ export default function SlotMachine() {
               "drop-shadow-[0_0_30px_rgba(255,182,193,0.5)]",
               "font-serif"
             )}
-            animate={
-              godModeFlash
-                ? { scale: [1, 1.1, 1] }
-                : {}
-            }
+            animate={godModeFlash ? { scale: [1, 1.1, 1] } : {}}
             transition={{ duration: 0.4 }}
           >
             <Heart className="inline-block mb-2 mr-2 text-pink-300 fill-pink-300" size={32} />
@@ -188,7 +220,7 @@ export default function SlotMachine() {
           <div className="flex justify-center gap-3 sm:gap-4">
             {[0, 1, 2].map((i) => (
               <Reel
-                key={`${i}-${spinCount}`} // Force remount on every spin to ensure fresh animation
+                key={i}
                 finalSymbol={reels[i]}
                 spinning={spinning}
                 stopDelay={REEL_STOP_DELAYS[i]}
@@ -223,9 +255,7 @@ export default function SlotMachine() {
             >
               {result.isWin ? (
                 <motion.div
-                  animate={{
-                    scale: [1, 1.06, 1],
-                  }}
+                  animate={{ scale: [1, 1.06, 1] }}
                   transition={{ repeat: Infinity, duration: 1.2, ease: "easeInOut" }}
                 >
                   <p className="text-3xl sm:text-4xl font-bold text-gold font-serif drop-shadow-[0_0_20px_rgba(255,215,0,0.6)]">
@@ -268,7 +298,6 @@ export default function SlotMachine() {
 
       {/* ===== LANCER BUTTON ===== */}
       <div className="relative mt-2 mb-6">
-        {/* Romantic Glow */}
         {!spinning && !cooldown && (
           <motion.div
             className="absolute inset-0 rounded-full bg-gradient-to-r from-pink-400/50 via-rose-400/60 to-pink-400/50 blur-2xl"
