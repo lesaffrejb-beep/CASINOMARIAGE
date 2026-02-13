@@ -57,7 +57,7 @@ function SymbolFace({ symbol, isSpinning }: SymbolFaceProps) {
         draggable={false}
         loading="eager"
       />
-      
+
       {/* Subtle Shine */}
       <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-white/10 to-transparent pointer-events-none mix-blend-overlay" />
 
@@ -116,45 +116,51 @@ export default function Reel({ finalSymbol, spinning, stopDelay, reelIndex }: Re
 
         <AnimatePresence mode="wait">
           <motion.div
-            key={`${displaySymbol.id}-${isLocked ? "locked" : "spin"}-${spinning ? "go" : "idle"}`}
+            key={`${displaySymbol.id}-${isLocked ? "locked" : "spin"}`}
             className="w-full h-full"
-            initial={isLocked ? { y: -50, scale: 0.7, opacity: 0.5 } : { opacity: 0.7 }}
+            initial={isLocked ? { y: -50, scale: 0.7, opacity: 0.5 } : { y: 0, opacity: 0.6 }}
             animate={
               isLocked
                 ? {
-                    y: 0,
-                    scale: 1,
-                    opacity: 1,
-                    transition: {
-                      type: "spring",
-                      stiffness: 400,
-                      damping: 12,
-                      mass: 1.5,
-                    },
-                  }
+                  y: 0,
+                  scale: 1,
+                  opacity: 1,
+                  transition: {
+                    type: "spring",
+                    stiffness: 400,
+                    damping: 12,
+                    mass: 1.5,
+                  },
+                }
                 : {
-                    opacity: 1,
-                    transition: { duration: 0.04 },
-                  }
+                  y: [-15, 0, 15, 0], // Vertical vibration loop
+                  opacity: 0.8,
+                  transition: {
+                    duration: 0.1,
+                    repeat: Infinity,
+                    ease: "linear"
+                  },
+                }
             }
             style={{
-              filter: spinning && !isLocked ? "blur(3px) brightness(0.7)" : "blur(0px) brightness(1)",
+              filter: spinning && !isLocked ? "blur(4px) brightness(0.8)" : "none",
             }}
           >
             <SymbolFace symbol={displaySymbol} isSpinning={spinning && !isLocked} />
           </motion.div>
         </AnimatePresence>
-
-        {/* Lock flash effect */}
-        {isLocked && spinning && (
-          <motion.div
-            className="absolute inset-0 rounded-xl pointer-events-none z-30"
-            initial={{ opacity: 0.8, background: "rgba(255, 215, 0, 0.3)" }}
-            animate={{ opacity: 0, background: "rgba(255, 215, 0, 0)" }}
-            transition={{ duration: 0.4 }}
-          />
-        )}
       </div>
+
+      {/* Lock flash effect */}
+      {isLocked && spinning && (
+        <motion.div
+          className="absolute inset-0 rounded-xl pointer-events-none z-30"
+          initial={{ opacity: 0.8, background: "rgba(255, 215, 0, 0.3)" }}
+          animate={{ opacity: 0, background: "rgba(255, 215, 0, 0)" }}
+          transition={{ duration: 0.4 }}
+        />
+      )}
     </div>
+    </div >
   );
 }

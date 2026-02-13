@@ -178,7 +178,7 @@ export default function SlotMachine() {
           <div className="flex justify-center gap-3 sm:gap-4">
             {[0, 1, 2].map((i) => (
               <Reel
-                key={i}
+                key={`${i}-${spinCount}`} // Force remount on every spin to ensure fresh animation
                 finalSymbol={reels[i]}
                 spinning={spinning}
                 stopDelay={REEL_STOP_DELAYS[i]}
