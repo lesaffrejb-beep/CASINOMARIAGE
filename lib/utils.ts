@@ -64,7 +64,7 @@ export const SYMBOLS: Symbol[] = [
 
 export const WIN_RATE = 1 / 3;
 export const NEAR_MISS_RATE = 0.5;
-export const COOLDOWN_MS = 5000;
+export const COOLDOWN_MS = 0; // No cooldown - instant replay
 
 export interface SpinResult {
   reels: [Symbol, Symbol, Symbol];

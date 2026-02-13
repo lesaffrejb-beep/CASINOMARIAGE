@@ -3,7 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import JSConfetti from "js-confetti";
-import { Heart, Sparkles, Crown } from "lucide-react";
+import { Heart, Sparkles } from "lucide-react";
 import clsx from "clsx";
 import Reel from "./Reel";
 import { spin, COOLDOWN_MS, type SpinResult } from "@/lib/utils";
@@ -95,37 +95,39 @@ export default function SlotMachine() {
 
       {/* ===== HEADER / LOGO ===== */}
       <motion.div
-        className="mt-8 mb-4 cursor-pointer relative z-10"
+        className="mt-8 mb-6 cursor-pointer relative z-10"
         onTouchEnd={handleLogoTap}
         onClick={handleLogoTap}
         whileTap={{ scale: 0.95 }}
       >
-        <div className="relative px-6 py-3">
-          {/* Double gold border frame */}
-          <div className="absolute -inset-1 border border-gold/30 rounded-2xl" />
-          <div className="absolute -inset-3 border-2 border-gold/20 rounded-2xl" />
+        <div className="relative px-8 py-4">
+          {/* Romantic glow */}
+          <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-pink-500/20 via-rose-400/20 to-pink-500/20 blur-xl" />
+
+          {/* Elegant border */}
+          <div className="absolute -inset-1 border-2 border-pink-300/30 rounded-3xl" />
 
           <motion.h1
             className={clsx(
-              "text-3xl sm:text-4xl font-bold text-center tracking-wide leading-tight",
-              "bg-gradient-to-r from-yellow-300 via-gold to-yellow-300 bg-clip-text text-transparent",
-              "drop-shadow-[0_0_20px_rgba(255,215,0,0.4)]",
+              "text-4xl sm:text-5xl font-bold text-center tracking-wide leading-tight relative",
+              "bg-gradient-to-r from-pink-200 via-rose-300 to-pink-200 bg-clip-text text-transparent",
+              "drop-shadow-[0_0_30px_rgba(255,182,193,0.5)]",
               "font-serif"
             )}
             animate={
               godModeFlash
-                ? { scale: [1, 1.2, 1] }
+                ? { scale: [1, 1.1, 1] }
                 : {}
             }
             transition={{ duration: 0.4 }}
           >
-            <Crown className="inline-block mb-1 mr-1 text-gold" size={24} />
+            <Heart className="inline-block mb-2 mr-2 text-pink-300 fill-pink-300" size={32} />
             Casino Mariage
-            <Crown className="inline-block mb-1 ml-1 text-gold" size={24} />
+            <Heart className="inline-block mb-2 ml-2 text-pink-300 fill-pink-300" size={32} />
           </motion.h1>
 
-          <p className="text-center text-gold/60 text-xs mt-1 font-serif italic tracking-widest">
-            ✦ LOVE CASINO 777 ✦
+          <p className="text-center text-pink-200/70 text-sm mt-2 font-serif italic tracking-widest">
+            ✦ L&apos;Amour tourne toujours ✦
           </p>
         </div>
 
@@ -133,44 +135,52 @@ export default function SlotMachine() {
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[10px] text-pink-400 whitespace-nowrap font-bold"
+            className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[10px] text-rose-400 whitespace-nowrap font-bold"
           >
-            ♠ MODE ACTIVÉ ♠
+            ♥ MODE ACTIVÉ ♥
           </motion.div>
         )}
       </motion.div>
 
-      {/* ===== DIVIDER ===== */}
-      <div className="flex items-center gap-3 my-2 w-full max-w-[280px]">
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-        <Heart className="text-pink-500/60" size={12} fill="currentColor" />
-        <Sparkles className="text-gold/60" size={12} />
-        <Heart className="text-pink-500/60" size={12} fill="currentColor" />
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+      {/* ===== ROMANTIC DIVIDER ===== */}
+      <div className="flex items-center gap-3 my-3 w-full max-w-[300px]">
+        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-pink-300/50 to-transparent" />
+        <Heart className="text-pink-400/60" size={14} fill="currentColor" />
+        <Sparkles className="text-rose-300/60" size={14} />
+        <Heart className="text-pink-400/60" size={14} fill="currentColor" />
+        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-pink-300/50 to-transparent" />
       </div>
 
       {/* ===== SLOT MACHINE FRAME ===== */}
-      <div className="relative w-full mt-2">
-        {/* Outer glow */}
-        <div className="absolute -inset-2 rounded-3xl bg-gradient-to-b from-gold/10 via-transparent to-gold/10 blur-sm" />
+      <div className="relative w-full mt-3">
+        {/* Romantic glow */}
+        <div className="absolute -inset-3 rounded-3xl bg-gradient-to-b from-pink-400/15 via-rose-300/10 to-pink-400/15 blur-lg" />
 
         {/* Machine body */}
-        <div className="relative bg-gradient-to-b from-[#12183a] via-[#0e1430] to-[#0a0f25] rounded-2xl border-2 border-gold/40 p-5 sm:p-6 shadow-[0_0_40px_rgba(255,215,0,0.1),inset_0_1px_0_rgba(255,255,255,0.05)]">
+        <div className="relative bg-gradient-to-br from-purple-950/40 via-pink-950/30 to-purple-950/40 rounded-3xl border-2 border-pink-300/40 p-6 sm:p-7 shadow-[0_0_50px_rgba(255,182,193,0.15),inset_0_2px_0_rgba(255,255,255,0.08)]">
 
-          {/* Corner decorations */}
-          <div className="absolute top-3 left-3 w-5 h-5 border-t-2 border-l-2 border-gold/50 rounded-tl-lg" />
-          <div className="absolute top-3 right-3 w-5 h-5 border-t-2 border-r-2 border-gold/50 rounded-tr-lg" />
-          <div className="absolute bottom-3 left-3 w-5 h-5 border-b-2 border-l-2 border-gold/50 rounded-bl-lg" />
-          <div className="absolute bottom-3 right-3 w-5 h-5 border-b-2 border-r-2 border-gold/50 rounded-br-lg" />
+          {/* Heart decorations */}
+          <div className="absolute top-4 left-4">
+            <Heart className="text-pink-300/40" size={16} fill="currentColor" />
+          </div>
+          <div className="absolute top-4 right-4">
+            <Heart className="text-pink-300/40" size={16} fill="currentColor" />
+          </div>
+          <div className="absolute bottom-4 left-4">
+            <Heart className="text-rose-300/40" size={16} fill="currentColor" />
+          </div>
+          <div className="absolute bottom-4 right-4">
+            <Heart className="text-rose-300/40" size={16} fill="currentColor" />
+          </div>
 
-          {/* 777 header */}
-          <div className="text-center mb-5">
+          {/* Romantic header */}
+          <div className="text-center mb-6">
             <div className="inline-flex items-center gap-3">
-              <span className="text-gold/40 text-lg">♠</span>
-              <span className="text-gold text-3xl font-bold tracking-[0.4em] font-serif drop-shadow-[0_0_10px_rgba(255,215,0,0.5)]">
-                777
+              <Heart className="text-pink-300/50" size={20} fill="currentColor" />
+              <span className="text-rose-300 text-2xl font-bold tracking-[0.3em] font-serif drop-shadow-[0_0_15px_rgba(255,182,193,0.6)]">
+                ♥ L&apos;AMOUR ♥
               </span>
-              <span className="text-gold/40 text-lg">♠</span>
+              <Heart className="text-pink-300/50" size={20} fill="currentColor" />
             </div>
           </div>
 
@@ -196,7 +206,7 @@ export default function SlotMachine() {
         </div>
 
         {/* Machine base */}
-        <div className="mx-auto w-[85%] h-2 bg-gradient-to-b from-gold/25 to-gold/5 rounded-b-xl" />
+        <div className="mx-auto w-[85%] h-2 bg-gradient-to-b from-pink-300/30 to-rose-300/10 rounded-b-xl" />
       </div>
 
       {/* ===== RESULT DISPLAY ===== */}
@@ -257,14 +267,14 @@ export default function SlotMachine() {
       </div>
 
       {/* ===== LANCER BUTTON ===== */}
-      <div className="relative mt-1 mb-6">
-        {/* Glow */}
+      <div className="relative mt-2 mb-6">
+        {/* Romantic Glow */}
         {!spinning && !cooldown && (
           <motion.div
-            className="absolute inset-0 rounded-full bg-gradient-to-r from-gold/50 via-yellow-400/50 to-gold/50 blur-xl"
-            style={{ transform: "scale(1.4)" }}
-            animate={{ opacity: [0.4, 0.7, 0.4] }}
-            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+            className="absolute inset-0 rounded-full bg-gradient-to-r from-pink-400/50 via-rose-400/60 to-pink-400/50 blur-2xl"
+            style={{ transform: "scale(1.5)" }}
+            animate={{ opacity: [0.5, 0.8, 0.5] }}
+            transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
           />
         )}
 
@@ -272,14 +282,14 @@ export default function SlotMachine() {
           onClick={handleSpin}
           disabled={spinning || cooldown}
           className={clsx(
-            "relative px-14 py-4 sm:px-16 sm:py-5 rounded-full font-bold text-xl sm:text-2xl uppercase tracking-[0.15em]",
+            "relative px-16 py-5 sm:px-20 sm:py-6 rounded-full font-bold text-xl sm:text-2xl uppercase tracking-[0.2em]",
             "border-4 transition-all duration-200",
             spinning || cooldown
               ? "bg-gray-700 border-gray-600 text-gray-500 cursor-not-allowed shadow-[0_3px_0_0_rgba(60,60,60,1)]"
-              : "bg-gradient-to-b from-yellow-400 via-gold to-yellow-600 border-yellow-500/80 text-[#1a0f00] shadow-[0_6px_0_0_rgba(160,120,0,1),0_8px_25px_rgba(0,0,0,0.5)] hover:from-yellow-300 hover:via-yellow-400 hover:to-yellow-500 active:shadow-[0_2px_0_0_rgba(160,120,0,1)] active:translate-y-1"
+              : "bg-gradient-to-b from-pink-400 via-rose-400 to-pink-500 border-pink-300/80 text-white shadow-[0_6px_0_0_rgba(219,39,119,0.8),0_10px_30px_rgba(244,114,182,0.4)] hover:from-pink-300 hover:via-rose-300 hover:to-pink-400 active:shadow-[0_2px_0_0_rgba(219,39,119,0.8)] active:translate-y-1"
           )}
-          whileTap={!spinning && !cooldown ? { scale: 0.94, y: 4 } : {}}
-          whileHover={!spinning && !cooldown ? { scale: 1.04 } : {}}
+          whileTap={!spinning && !cooldown ? { scale: 0.96, y: 4 } : {}}
+          whileHover={!spinning && !cooldown ? { scale: 1.03 } : {}}
         >
           {spinning ? (
             <span className="flex items-center gap-2">
