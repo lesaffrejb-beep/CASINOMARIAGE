@@ -39,20 +39,20 @@ function SymbolFace({ symbol, isSpinning }: { symbol: Symbol; isSpinning: boolea
   const showPlaceholder = imgFailed || !imgLoaded;
 
   return (
-    <div className="w-full h-full relative overflow-hidden rounded-lg">
+    <div className="w-full h-full relative overflow-hidden rounded-lg border border-white/10 shadow-sm bg-black">
       {/* Placeholder (always rendered underneath to prevent layout shift) */}
       <div
         className={clsx(
-          "absolute inset-0 flex flex-col items-center justify-center gap-1",
-          "bg-gradient-to-br border-2 border-white/20 shadow-inner transition-opacity duration-100",
+          "absolute inset-0 flex flex-col items-center justify-center gap-1 p-1",
+          "bg-gradient-to-br shadow-inner transition-opacity duration-100",
           symbol.color,
           showPlaceholder ? "opacity-100" : "opacity-0"
         )}
       >
-        <span className="text-2xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+        <span className="text-xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
           {symbol.initials}
         </span>
-        <span className="text-[10px] font-semibold text-white/90 text-center leading-tight px-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)] uppercase tracking-wide">
+        <span className="text-[9px] font-semibold text-white/90 text-center leading-[1.1] break-words w-full drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)] uppercase tracking-wide">
           {symbol.name}
         </span>
       </div>
@@ -73,14 +73,16 @@ function SymbolFace({ symbol, isSpinning }: { symbol: Symbol; isSpinning: boolea
             draggable={false}
             loading="eager"
           />
-          {/* Subtle Shine */}
+
+          {/* Subtle Bottom Shade for Text Readability - Only if loaded */}
           {imgLoaded && (
-            <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-white/10 to-transparent pointer-events-none mix-blend-overlay" />
+            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none" />
           )}
+
           {/* Name overlay at bottom */}
           {imgLoaded && !isSpinning && (
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent pt-4 pb-1">
-              <p className="text-[10px] font-bold text-white text-center truncate drop-shadow-[0_1px_2px_black] uppercase tracking-wider px-1">
+            <div className="absolute bottom-0 left-0 right-0 p-1 pb-1.5 flex items-end justify-center">
+              <p className="text-[8px] sm:text-[9px] font-bold text-white text-center leading-[1.1] break-words uppercase tracking-wider drop-shadow-md px-0.5">
                 {symbol.name}
               </p>
             </div>
@@ -130,13 +132,13 @@ export default function Reel({ finalSymbol, spinning, stopDelay, reelIndex }: Re
 
   return (
     <div className="relative">
-      {/* Outer gold frame */}
-      <div className="absolute -inset-[3px] rounded-xl bg-gradient-to-b from-yellow-400 via-gold to-yellow-600 shadow-[0_0_12px_rgba(255,215,0,0.3)]" />
+      {/* Outer gold frame - Softer and more elegant */}
+      <div className="absolute -inset-[2px] rounded-xl bg-gradient-to-b from-[#cfb53b] via-[#fcd667] to-[#d4af37] shadow-lg" />
 
       {/* Inner container */}
-      <div className="relative w-[95px] h-[115px] sm:w-[110px] sm:h-[130px] overflow-hidden rounded-xl bg-[#0a0f1e]">
-        {/* Inner shadow */}
-        <div className="absolute inset-0 shadow-[inset_0_0_15px_rgba(0,0,0,0.6)] rounded-xl pointer-events-none z-20" />
+      <div className="relative w-[95px] h-[115px] sm:w-[110px] sm:h-[130px] overflow-hidden rounded-xl bg-[#1a1a1a]">
+        {/* Inner shadow for depth */}
+        <div className="absolute inset-0 shadow-[inset_0_0_10px_rgba(0,0,0,0.7)] rounded-xl pointer-events-none z-20" />
 
         {isIdle && !hasSpunRef.current ? (
           // First render: completely static, no animation = no jump

@@ -138,27 +138,31 @@ export default function SlotMachine() {
         whileTap={{ scale: 0.95 }}
       >
         <div className="relative px-8 py-4">
+<<<<<<< HEAD
           {/* Romantic glow */}
           <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-pink-500/20 via-rose-400/20 to-pink-500/20 blur-xl" />
           {/* Elegant border */}
           <div className="absolute -inset-1 border-2 border-pink-300/30 rounded-3xl" />
+=======
+          {/* Subtle Back Glow */}
+          <div className="absolute inset-0 rounded-3xl bg-rose-500/5 blur-3xl opacity-50" />
+>>>>>>> 2f6f24a (feat: refine slot machine UI and fix display issues)
 
           <motion.h1
             className={clsx(
-              "text-4xl sm:text-5xl font-bold text-center tracking-wide leading-tight relative",
-              "bg-gradient-to-r from-pink-200 via-rose-300 to-pink-200 bg-clip-text text-transparent",
-              "drop-shadow-[0_0_30px_rgba(255,182,193,0.5)]",
-              "font-serif"
+              "text-4xl sm:text-5xl font-bold text-center tracking-wide leading-tight relative z-10",
+              "text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5E1] to-[#E8B298]",
+              "font-serif drop-shadow-sm"
             )}
             animate={godModeFlash ? { scale: [1, 1.1, 1] } : {}}
             transition={{ duration: 0.4 }}
           >
-            <Heart className="inline-block mb-2 mr-2 text-pink-300 fill-pink-300" size={32} />
+            <Heart className="inline-block mb-1 mr-3 text-rose-400 fill-rose-400/20" size={28} />
             Casino Mariage
-            <Heart className="inline-block mb-2 ml-2 text-pink-300 fill-pink-300" size={32} />
+            <Heart className="inline-block mb-1 ml-3 text-rose-400 fill-rose-400/20" size={28} />
           </motion.h1>
 
-          <p className="text-center text-pink-200/70 text-sm mt-2 font-serif italic tracking-widest">
+          <p className="text-center text-[#E8B298]/80 text-sm mt-3 font-serif italic tracking-[0.2em]">
             ✦ L&apos;Amour tourne toujours ✦
           </p>
         </div>
@@ -189,7 +193,8 @@ export default function SlotMachine() {
         <div className="absolute -inset-3 rounded-3xl bg-gradient-to-b from-pink-400/15 via-rose-300/10 to-pink-400/15 blur-lg" />
 
         {/* Machine body */}
-        <div className="relative bg-gradient-to-br from-purple-950/40 via-pink-950/30 to-purple-950/40 rounded-3xl border-2 border-pink-300/40 p-6 sm:p-7 shadow-[0_0_50px_rgba(255,182,193,0.15),inset_0_2px_0_rgba(255,255,255,0.08)]">
+        {/* Machine body - More elegant, less neon */}
+        <div className="relative bg-[#1a1a1a] rounded-3xl border border-white/10 p-6 sm:p-8 shadow-2xl">
 
           {/* Heart decorations */}
           <div className="absolute top-4 left-4">
@@ -217,7 +222,7 @@ export default function SlotMachine() {
           </div>
 
           {/* ===== REELS ===== */}
-          <div className="flex justify-center gap-3 sm:gap-4">
+          <div className="flex justify-center gap-3 sm:gap-4 relative z-10">
             {[0, 1, 2].map((i) => (
               <Reel
                 key={i}
@@ -227,13 +232,11 @@ export default function SlotMachine() {
                 reelIndex={i}
               />
             ))}
-          </div>
 
-          {/* Payline */}
-          <div className="relative mt-4 mb-2 flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-gradient-to-r from-pink-500 to-red-500 shadow-[0_0_6px_rgba(255,105,180,0.6)]" />
-            <div className="flex-1 h-[2px] bg-gradient-to-r from-pink-500/60 via-pink-400/30 to-pink-500/60" />
-            <div className="w-3 h-3 rounded-full bg-gradient-to-r from-pink-500 to-red-500 shadow-[0_0_6px_rgba(255,105,180,0.6)]" />
+            {/* Elegant Payline Indicator - Absolute centered */}
+            <div className="absolute top-1/2 left-0 w-full -translate-y-1/2 pointer-events-none opacity-30 z-20">
+              <div className="h-[1px] bg-gradient-to-r from-transparent via-red-400 to-transparent w-full" />
+            </div>
           </div>
         </div>
 
@@ -311,11 +314,11 @@ export default function SlotMachine() {
           onClick={handleSpin}
           disabled={spinning || cooldown}
           className={clsx(
-            "relative px-16 py-5 sm:px-20 sm:py-6 rounded-full font-bold text-xl sm:text-2xl uppercase tracking-[0.2em]",
-            "border-4 transition-all duration-200",
+            "relative px-12 py-4 sm:px-16 sm:py-5 rounded-full font-bold text-lg sm:text-xl uppercase tracking-[0.15em] font-serif",
+            "transition-all duration-300",
             spinning || cooldown
-              ? "bg-gray-700 border-gray-600 text-gray-500 cursor-not-allowed shadow-[0_3px_0_0_rgba(60,60,60,1)]"
-              : "bg-gradient-to-b from-pink-400 via-rose-400 to-pink-500 border-pink-300/80 text-white shadow-[0_6px_0_0_rgba(219,39,119,0.8),0_10px_30px_rgba(244,114,182,0.4)] hover:from-pink-300 hover:via-rose-300 hover:to-pink-400 active:shadow-[0_2px_0_0_rgba(219,39,119,0.8)] active:translate-y-1"
+              ? "bg-stone-800 text-stone-600 cursor-not-allowed shadow-none"
+              : "bg-gradient-to-b from-rose-400 to-rose-600 text-white shadow-[0_4px_15px_rgba(225,29,72,0.4)] hover:shadow-[0_6px_20px_rgba(225,29,72,0.6)] hover:-translate-y-0.5"
           )}
           whileTap={!spinning && !cooldown ? { scale: 0.96, y: 4 } : {}}
           whileHover={!spinning && !cooldown ? { scale: 1.03 } : {}}
@@ -344,14 +347,7 @@ export default function SlotMachine() {
         </motion.button>
       </div>
 
-      {/* ===== FOOTER STATS ===== */}
-      <div className="w-full max-w-xs mb-8">
-        <div className="flex justify-center gap-4 text-[11px] text-white/25 font-serif">
-          <span>Tirages : {spinCount}</span>
-          <span className="text-gold/20">|</span>
-          <span>Chance : 1/3</span>
-        </div>
-      </div>
+
 
       {/* ===== DECORATIVE HEARTS (subtle) ===== */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden opacity-[0.07]">
