@@ -138,15 +138,8 @@ export default function SlotMachine() {
         whileTap={{ scale: 0.95 }}
       >
         <div className="relative px-8 py-4">
-<<<<<<< HEAD
-          {/* Romantic glow */}
-          <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-pink-500/20 via-rose-400/20 to-pink-500/20 blur-xl" />
-          {/* Elegant border */}
-          <div className="absolute -inset-1 border-2 border-pink-300/30 rounded-3xl" />
-=======
           {/* Subtle Back Glow */}
           <div className="absolute inset-0 rounded-3xl bg-rose-500/5 blur-3xl opacity-50" />
->>>>>>> 2f6f24a (feat: refine slot machine UI and fix display issues)
 
           <motion.h1
             className={clsx(
