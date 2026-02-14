@@ -227,9 +227,6 @@ export default function SlotMachine() {
             ))}
 
             {/* Elegant Payline Indicator - Absolute centered */}
-            <div className="absolute top-1/2 left-0 w-full -translate-y-1/2 pointer-events-none opacity-30 z-20">
-              <div className="h-[1px] bg-gradient-to-r from-transparent via-red-400 to-transparent w-full" />
-            </div>
           </div>
         </div>
 
