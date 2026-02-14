@@ -15,10 +15,48 @@ interface ReelProps {
 // Cache failed image sources globally so we never retry a broken src
 const failedSrcs = new Set<string>();
 
+// Global preload cache - tracks which images have been successfully preloaded
+const preloadedImages = new Set<string>();
+let preloadPromise: Promise<void> | null = null;
+
+// Preload all symbol images
+function preloadAllImages(): Promise<void> {
+  if (preloadPromise) return preloadPromise;
+
+  preloadPromise = Promise.all(
+    SYMBOLS.map((symbol) => {
+      return new Promise<void>((resolve) => {
+        if (preloadedImages.has(symbol.src)) {
+          resolve();
+          return;
+        }
+
+        const img = new Image();
+        img.onload = () => {
+          preloadedImages.add(symbol.src);
+          resolve();
+        };
+        img.onerror = () => {
+          failedSrcs.add(symbol.src);
+          resolve(); // Resolve anyway to not block other images
+        };
+        img.src = symbol.src;
+      });
+    })
+  ).then(() => { });
+
+  return preloadPromise;
+}
+
 function SymbolFace({ symbol, isSpinning }: { symbol: Symbol; isSpinning: boolean }) {
-  const [imgLoaded, setImgLoaded] = useState(false);
+  const [imgLoaded, setImgLoaded] = useState(() => preloadedImages.has(symbol.src));
   const [imgFailed, setImgFailed] = useState(() => failedSrcs.has(symbol.src));
   const imgRef = useRef<HTMLImageElement>(null);
+
+  // Trigger preload on mount
+  useEffect(() => {
+    preloadAllImages();
+  }, []);
 
   const handleError = useCallback(() => {
     failedSrcs.add(symbol.src);
