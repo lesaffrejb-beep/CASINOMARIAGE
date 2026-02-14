@@ -18,6 +18,7 @@ const failedSrcs = new Set<string>();
 function SymbolFace({ symbol, isSpinning }: { symbol: Symbol; isSpinning: boolean }) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const [imgFailed, setImgFailed] = useState(() => failedSrcs.has(symbol.src));
+  const imgRef = useRef<HTMLImageElement>(null);
 
   const handleError = useCallback(() => {
     failedSrcs.add(symbol.src);
@@ -28,12 +29,29 @@ function SymbolFace({ symbol, isSpinning }: { symbol: Symbol; isSpinning: boolea
     setImgLoaded(true);
   }, []);
 
+  // Check if image is already loaded (from cache) on mount
+  useEffect(() => {
+    if (imgRef.current && imgRef.current.complete) {
+      if (imgRef.current.naturalWidth > 0) {
+        setImgLoaded(true);
+      } else {
+        // Only set failed if truly broken (width 0), but usually onError fires
+      }
+    }
+  }, []);
+
   // When symbol changes, reset loaded state (but keep failed from cache)
   const prevSrc = useRef(symbol.src);
   if (prevSrc.current !== symbol.src) {
     prevSrc.current = symbol.src;
-    setImgLoaded(false);
-    setImgFailed(failedSrcs.has(symbol.src));
+    // If invalid in cache, fail immediately
+    if (failedSrcs.has(symbol.src)) {
+      setImgFailed(true);
+      setImgLoaded(false);
+    } else {
+      setImgFailed(false);
+      setImgLoaded(false);
+    }
   }
 
   const showPlaceholder = imgFailed || !imgLoaded;
@@ -44,7 +62,7 @@ function SymbolFace({ symbol, isSpinning }: { symbol: Symbol; isSpinning: boolea
       <div
         className={clsx(
           "absolute inset-0 flex flex-col items-center justify-center gap-1 p-1",
-          "bg-gradient-to-br shadow-inner transition-opacity duration-100",
+          "bg-gradient-to-br shadow-inner transition-opacity duration-300",
           symbol.color,
           showPlaceholder ? "opacity-100" : "opacity-0"
         )}
@@ -62,10 +80,11 @@ function SymbolFace({ symbol, isSpinning }: { symbol: Symbol; isSpinning: boolea
         <>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
+            ref={imgRef}
             src={symbol.src}
             alt={symbol.name}
             className={clsx(
-              "absolute inset-0 w-full h-full object-cover rounded-lg transition-opacity duration-150",
+              "absolute inset-0 w-full h-full object-cover rounded-lg transition-opacity duration-500",
               imgLoaded ? "opacity-100" : "opacity-0"
             )}
             onError={handleError}
@@ -75,13 +94,21 @@ function SymbolFace({ symbol, isSpinning }: { symbol: Symbol; isSpinning: boolea
           />
 
           {/* Subtle Bottom Shade for Text Readability - Only if loaded */}
-          {imgLoaded && (
-            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none" />
-          )}
+          <div
+            className={clsx(
+              "absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none transition-opacity duration-500",
+              imgLoaded ? "opacity-100" : "opacity-0"
+            )}
+          />
 
           {/* Name overlay at bottom */}
-          {imgLoaded && !isSpinning && (
-            <div className="absolute bottom-0 left-0 right-0 p-1 pb-1.5 flex items-end justify-center">
+          {!isSpinning && (
+            <div
+              className={clsx(
+                "absolute bottom-0 left-0 right-0 p-1 pb-1.5 flex items-end justify-center transition-opacity duration-500",
+                imgLoaded ? "opacity-100" : "opacity-0"
+              )}
+            >
               <p className="text-[8px] sm:text-[9px] font-bold text-white text-center leading-[1.1] break-words uppercase tracking-wider drop-shadow-md px-0.5">
                 {symbol.name}
               </p>

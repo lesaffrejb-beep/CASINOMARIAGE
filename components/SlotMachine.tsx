@@ -341,21 +341,33 @@ export default function SlotMachine() {
       </div>
 
 
-
-      {/* ===== DECORATIVE HEARTS (subtle) ===== */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden opacity-[0.07]">
-        {[...Array(8)].map((_, i) => (
+      {/* ===== DECORATIVE HEARTS (Floating Background) ===== */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        {[...Array(15)].map((_, i) => (
           <Heart
             key={i}
-            className="absolute text-pink-400 animate-pulse"
-            size={14 + i * 5}
+            className="absolute text-pink-400/20"
+            size={Math.random() * 20 + 10}
             style={{
-              left: `${(i * 13 + 5) % 90}%`,
-              top: `${(i * 17 + 3) % 85}%`,
-              animationDelay: `${i * 0.5}s`,
-              animationDuration: `${2 + i * 0.3}s`,
+              left: `${Math.random() * 100}%`,
+              animation: `float-up ${Math.random() * 10 + 10}s linear infinite`,
+              animationDelay: `-${Math.random() * 20}s`,
+              opacity: 0.1
             }}
             fill="currentColor"
+          />
+        ))}
+        {/* Extra sparkles */}
+        {[...Array(5)].map((_, i) => (
+          <Sparkles
+            key={`s-${i}`}
+            className="absolute text-gold/10"
+            size={Math.random() * 15 + 5}
+            style={{
+              left: `${Math.random() * 100}%`,
+              animation: `float-up ${Math.random() * 15 + 15}s linear infinite`,
+              animationDelay: `-${Math.random() * 20}s`,
+            }}
           />
         ))}
       </div>
